@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CLIENT_PROGRAM="client_thread.py"
+
+python3 ./$CLIENT_PROGRAM $1 $2

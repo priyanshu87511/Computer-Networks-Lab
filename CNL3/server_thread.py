@@ -1,8 +1,9 @@
 import socket
 import threading
+import sys
 
 IP = socket.gethostbyname(socket.gethostname())
-PORT = 5566 #INPUT
+PORT = int(sys.argv[1])
 ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
@@ -10,7 +11,6 @@ TERMINATION_MSG = "GOODBYE"
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
-
     connected = True
     while connected:
         msg = conn.recv(SIZE).decode(FORMAT)
@@ -32,10 +32,9 @@ def main():
 
     while True:
         conn, addr = server.accept()
-        print(conn, addr)
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+        print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
 
 if __name__ == "__main__":
     main()

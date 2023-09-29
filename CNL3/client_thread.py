@@ -1,7 +1,8 @@
 import socket
+import sys
 
-IP = socket.gethostbyname(socket.gethostname())
-PORT = 5566
+IP = socket.gethostbyname(sys.argv[1])
+PORT = int(sys.argv[2])
 ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
