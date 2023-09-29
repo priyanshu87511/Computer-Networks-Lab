@@ -2,11 +2,11 @@ import socket
 import threading
 
 IP = socket.gethostbyname(socket.gethostname())
-PORT = 5566
+PORT = 5566 #INPUT
 ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
-DISCONNECT_MSG = "!DISCONNECT"
+TERMINATION_MSG = "GOODBYE"
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -14,11 +14,11 @@ def handle_client(conn, addr):
     connected = True
     while connected:
         msg = conn.recv(SIZE).decode(FORMAT)
-        if msg == DISCONNECT_MSG:
+        if (msg == TERMINATION_MSG):
             connected = False
 
         print(f"[{addr}] {msg}")
-        msg = f"Msg received: {msg}"
+        msg = "ALIVE"
         conn.send(msg.encode(FORMAT))
 
     conn.close()
@@ -32,6 +32,7 @@ def main():
 
     while True:
         conn, addr = server.accept()
+        print(conn, addr)
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")

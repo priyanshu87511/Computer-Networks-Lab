@@ -5,7 +5,7 @@ PORT = 5566
 ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
-DISCONNECT_MSG = "!DISCONNECT"
+TERMINATION_MSG = "GOODBYE"
 
 def main():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,7 +18,7 @@ def main():
 
         client.send(msg.encode(FORMAT))
 
-        if msg == DISCONNECT_MSG:
+        if msg == TERMINATION_MSG:
             connected = False
         else:
             msg = client.recv(SIZE).decode(FORMAT)
