@@ -1,9 +1,8 @@
 import socket
 import threading
-import sys
 
 IP = socket.gethostbyname(socket.gethostname())
-PORT = int(sys.argv[1])
+PORT = 5566 #INPUT
 ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
