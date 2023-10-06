@@ -47,15 +47,11 @@ def send_messages(client_socket, sent_timestamp):
         if sequnceNumber == 0:
             msg = START_MSG
         else:
-<<<<<<< HEAD
-            msg = input(">")
-=======
             try:
                 msg = input()
             except EOFError:
                 # Handle EOF (end of file) from input
                 msg = DISCONNECT_MSG
->>>>>>> 9ea82388fb9fa687f02f630a02d5464de3b83382
 
         if msg == TERMINATION_MSG or msg == DISCONNECT_MSG:
             msg = TERMINATION_MSG
@@ -71,12 +67,7 @@ def send_messages(client_socket, sent_timestamp):
             headerData = encodeHeaderData(FORMAT, msg, PACK_FORMAT, MAGIC_NUMBER, VERSION, command, sequnceNumber, sessionId)
             client_socket.send(headerData.decode('latin-1').encode(FORMAT))
             sent_timestamp[0] = time.time()
-<<<<<<< HEAD
             sequnceNumber += 1
-=======
-            iteration += 1
-        
->>>>>>> 9ea82388fb9fa687f02f630a02d5464de3b83382
         except:
             break
 

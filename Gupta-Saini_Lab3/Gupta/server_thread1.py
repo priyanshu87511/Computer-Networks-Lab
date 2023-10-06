@@ -40,15 +40,10 @@ def handle_client(conn, addr):
     while connected:
         try:
             conn.settimeout(TIMEOUT_SECONDS)  # Set the timeout for this connection
-<<<<<<< HEAD
             data = conn.recv(SIZE).decode(FORMAT)
             data = data.encode('latin-1')
             header, msg = getHeaderData(FORMAT, PACK_FORMAT, data)
             print(header)
-=======
-            msg = conn.recv(SIZE).decode(FORMAT)
-
->>>>>>> 9ea82388fb9fa687f02f630a02d5464de3b83382
         except socket.timeout:
             print(f"{addr} Connection timed out. GOODBYE from server.")
             msg = TERMINATION_MSG
