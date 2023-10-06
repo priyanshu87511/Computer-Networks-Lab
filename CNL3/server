@@ -1,5 +1,0 @@
-#!/bin/bash
-
-SERVER_PROGRAM="server_thread.py"
-
-python3 ./$SERVER_PROGRAM $1
