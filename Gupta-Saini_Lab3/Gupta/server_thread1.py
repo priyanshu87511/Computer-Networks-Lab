@@ -4,6 +4,7 @@ import sys
 import time
 import signal
 import os
+from struct import pack, unpack, calcsize
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = int(sys.argv[1])
@@ -11,12 +12,22 @@ ADDR = (IP, PORT)
 SIZE = 1024
 FORMAT = "utf-8"
 TERMINATION_MSG = "GOODBYE"
+PACK_FORMAT = "!HBBII"
 START_MSG = "HELLO"
 TIMEOUT_SECONDS = 5  # Set the initial timeout to 60 seconds
 
 # List to store all connected client connections
 connected_clients = []
 server = None  # To store the server socket
+
+def encode(dataFormat, data, headerFormat, *headers):
+    return pack(headerFormat, *headers) + data.encode(dataFormat)
+
+def getHeaderData(dataFormat, headerFormat, encoded):
+    header_size = calcsize(PACK_FORMAT)
+    header = unpack(headerFormat, encoded[:header_size])
+    data = encoded[header_size:].decode(dataFormat)
+    return header, data
 
 def handle_client(conn, addr):
     connected_clients.append(conn)
@@ -29,7 +40,10 @@ def handle_client(conn, addr):
     while connected:
         try:
             conn.settimeout(TIMEOUT_SECONDS)  # Set the timeout for this connection
-            msg = conn.recv(SIZE).decode(FORMAT)
+            data = conn.recv(SIZE).decode(FORMAT)
+            data = data.encode('latin-1')
+            header, msg = getHeaderData(FORMAT, PACK_FORMAT, data)
+            print(header)
         except socket.timeout:
             print(f"{addr} Connection timed out. GOODBYE from server.")
             msg = TERMINATION_MSG
