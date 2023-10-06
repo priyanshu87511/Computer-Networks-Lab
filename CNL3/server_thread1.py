@@ -10,7 +10,7 @@ SIZE = 1024
 FORMAT = "utf-8"
 TERMINATION_MSG = "GOODBYE"
 START_MSG = "HELLO"
-TIMEOUT_SECONDS = 60  # Set the initial timeout to 60 seconds
+TIMEOUT_SECONDS = 5  # Set the initial timeout to 60 seconds
 
 def handle_client(conn, addr):
     # print(f"[NEW CONNECTION] {addr} connected.")
