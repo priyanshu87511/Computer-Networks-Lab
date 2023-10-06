@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import time
+import signal
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = int(sys.argv[1])
@@ -10,9 +11,14 @@ SIZE = 1024
 FORMAT = "utf-8"
 TERMINATION_MSG = "GOODBYE"
 START_MSG = "HELLO"
-TIMEOUT_SECONDS = 60  # Set the initial timeout to 60 seconds
+TIMEOUT_SECONDS = 5  # Set the initial timeout to 60 seconds
+
+# List to store all connected client connections
+connected_clients = []
+server = None  # To store the server socket
 
 def handle_client(conn, addr):
+    connected_clients.append(conn)
     # print(f"[NEW CONNECTION] {addr} connected.")
 
     connected = True
@@ -57,12 +63,28 @@ def handle_client(conn, addr):
 
     print(f"{addr} Session closed")
     conn.close()
+    connected_clients.remove(conn)
+
+def close_server_and_connections(signal, frame):
+    print("Closing server and all connections, then exiting...")
+    for conn in connected_clients:
+        try:
+            conn.send(TERMINATION_MSG.encode(FORMAT))
+            conn.close()
+        except Exception as e:
+            pass
+    if server:
+        server.close()
+    sys.exit(0)
 
 def main():
+    global server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
     server.listen()
     print(f"Waiting on port {PORT}...")
+
+    signal.signal(signal.SIGINT, close_server_and_connections)
 
     while True:
         conn, addr = server.accept()

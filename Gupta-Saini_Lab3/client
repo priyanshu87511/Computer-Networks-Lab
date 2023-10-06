@@ -1,9 +1,9 @@
 #!/bin/bash
 COMPILER="python3"
-CLIENT_PROGRAM="client_thread.py"
+CLIENT_PROGRAM="/Saini/client_thread.py"
 LOCALHOST="127.0.1.1"
 
-# if [[ "$1" == "localhost" ]]
+# if [[ "$1" == "localhost" ]];
 # then
 #     $1 = $LOCALHOST
 # fi

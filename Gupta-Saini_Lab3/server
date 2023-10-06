@@ -1,5 +1,5 @@
 #!/bin/bash
 
-SERVER_PROGRAM="server_thread.py"
+SERVER_PROGRAM="/Gupta/server_thread1.py"
 
 python3 ./$SERVER_PROGRAM $1
