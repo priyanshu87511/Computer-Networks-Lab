@@ -30,6 +30,7 @@ def handle_client(conn, addr):
         try:
             conn.settimeout(TIMEOUT_SECONDS)  # Set the timeout for this connection
             msg = conn.recv(SIZE).decode(FORMAT)
+
         except socket.timeout:
             print(f"{addr} Connection timed out. GOODBYE from server.")
             msg = TERMINATION_MSG
@@ -37,7 +38,7 @@ def handle_client(conn, addr):
             connected = False
             continue
         except Exception as e:
-            print(f"{addr} An error occurred: {str(e)}")
+            print(f"{addr} EOF Spotted")
             connected = False
             continue
 

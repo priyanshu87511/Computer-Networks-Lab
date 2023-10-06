@@ -19,7 +19,11 @@ def send_messages(client_socket, sent_timestamp):
         if iteration == 0:
             msg = START_MSG
         else:
-            msg = input("")
+            try:
+                msg = input()
+            except EOFError:
+                # Handle EOF (end of file) from input
+                msg = DISCONNECT_MSG
 
         if msg == TERMINATION_MSG or msg == DISCONNECT_MSG:
             msg = TERMINATION_MSG
@@ -30,6 +34,7 @@ def send_messages(client_socket, sent_timestamp):
             client_socket.send(msg.encode(FORMAT))
             sent_timestamp[0] = time.time()
             iteration += 1
+        
         except:
             break
 
