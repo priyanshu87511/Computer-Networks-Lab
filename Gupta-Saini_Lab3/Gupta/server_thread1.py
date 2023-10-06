@@ -3,6 +3,7 @@ import threading
 import sys
 import time
 import signal
+import os
 
 IP = socket.gethostbyname(socket.gethostname())
 PORT = int(sys.argv[1])
@@ -77,6 +78,21 @@ def close_server_and_connections(signal, frame):
         server.close()
     sys.exit(0)
 
+def input_listener():
+    while True:
+        user_input = input()
+        if user_input.lower() == 'q':
+            print("Sending 'GOODBYE' message to all clients and closing connections...")
+            for conn in connected_clients:
+                try:
+                    conn.send(TERMINATION_MSG.encode(FORMAT))
+                    conn.close()
+                except Exception as e:
+                    pass
+            if server:
+                server.close()
+                os._exit(0)  # Terminate the program immediately
+
 def main():
     global server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,6 +101,11 @@ def main():
     print(f"Waiting on port {PORT}...")
 
     signal.signal(signal.SIGINT, close_server_and_connections)
+
+    # Create a thread for input listener
+    input_thread = threading.Thread(target=input_listener)
+    input_thread.daemon = True
+    input_thread.start()
 
     while True:
         conn, addr = server.accept()
