@@ -29,10 +29,6 @@ class HttpHeader:
         return tmp[:idx2]
 
     def transform_request_header(self):
-        # Filtering the request and response streams
-        # Lower the HTTP version of the request to HTTP 1.0
-        # Remove any Connection: keep-alive, insert a Connection: close,
-        # Convert any Proxy-connection: keep-alive to Proxy-connection: close
         tmp = self.request.replace("/1.1", "/1.0").replace("keep-alive", "close")
         return HttpHeader(tmp)
 
@@ -54,7 +50,6 @@ class HttpHeader:
         return host_line[start + 6:-1]
     
     def get_port_num(self):
-        # Your port parsing logic goes here
         request = self.request
         port = 80
         l_request = request.lower()
@@ -69,7 +64,6 @@ class HttpHeader:
             pass
         for i in range(1, len(lines)):
             line = lines[i].replace(" ", "")
-            # print(line)
             if line.startswith("host"):
                 parts = line.split(":")
                 last_part = parts[-1].strip()
@@ -77,7 +71,6 @@ class HttpHeader:
                     port = (int)(last_part)
                 except:
                     pass
-        # print(port)
         return port
 
     @staticmethod

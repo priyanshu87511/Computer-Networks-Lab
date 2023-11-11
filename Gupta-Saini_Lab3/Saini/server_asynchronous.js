@@ -88,8 +88,12 @@ const clients = new Map();
 const socketToSessionId = new Map();
 
 function terminateConnection(socket) {
-    clearInterval(timer);
-    socket.write(TERMINATION_MSG, FORMAT);
+    // clearInterval(timer);
+    // socket.write(TERMINATION_MSG, FORMAT);
+    const command = getCommand(input);
+    const header = getHeader(PACK_FORMAT, MAGIC_NUMBER, VERSION, command, sequence_number, sessionId);
+    const MSG = getMessage(header, TERMINATION_MSG);
+    sendMessage(MSG);
     socket.end();
 }
 

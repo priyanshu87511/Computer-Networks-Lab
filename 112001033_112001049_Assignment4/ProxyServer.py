@@ -1,3 +1,4 @@
+import sys
 import socket
 from datetime import datetime
 from threading import Thread
@@ -27,11 +28,14 @@ class ProxyServer:
             print("Couldn't start server:", ex)
 
 class Proxy(Thread):
-    TIMEOUT = 20  # Set timeout in seconds
+    TIMEOUT = 20  
 
     def __init__(self, connection):
         super().__init__()
         self.connection = connection
+
+    def parse_port_num(self, request):
+        return 80
 
     def run(self):
         try:
@@ -48,7 +52,6 @@ class Proxy(Thread):
             if host is None:
                 return
             HttpHeader.print_date_stamp()
-            print("hello", request.get_port_num())
             print(">>>", request.get_start_line())
             port = self.parse_port_num(request)
             if ':' in host:
@@ -56,9 +59,6 @@ class Proxy(Thread):
 
             proxy_to_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-            # if not request.is_connect():
-            # if True:
-            
             if not request.is_connect():
                 request = request.transform_request_header()
                 proxy_to_server.connect((host, request.get_port_num()))
@@ -83,9 +83,7 @@ class Proxy(Thread):
                 read_from_server.start()
 
         except Exception as e:
-            # print("Error:", e)
             pass
-            # Close sockets and streams in a 'finally' block
 
 class Forward(Thread):
     def __init__(self, source, destination):
@@ -104,10 +102,9 @@ class Forward(Thread):
                     self.destination.close()
                     break
             except Exception as e:
-                # print("Forwarding error:", e)
                 break
 
 if __name__ == "__main__":
-    PORT = 12321
+    PORT = sys.argv[1]
     proxy_server = ProxyServer()
     proxy_server.main([f'{PORT}'])

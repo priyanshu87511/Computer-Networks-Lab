@@ -11,9 +11,7 @@ class Forward(Thread):
             self.sender.settimeout(60)
             self.receiver.settimeout(60)
         except socket.error as e:
-            # print(e)
             pass
-            # Handle timeout setting errors
 
     def run(self):
         try:
@@ -31,9 +29,7 @@ class Forward(Thread):
             out_to_receiver.close()
 
         except socket.error as e:
-            # print(e)
             pass
-            # Handle connection errors or timeout
 
     @staticmethod
     def byte_array_to_hex(a):

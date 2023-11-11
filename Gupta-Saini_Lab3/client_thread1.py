@@ -19,7 +19,7 @@ def send_messages(client_socket, sent_timestamp):
         if iteration == 0:
             msg = START_MSG
         else:
-            msg = input("> ")
+            msg = sys.stdin.readline().rstrip()
 
         if msg == TERMINATION_MSG or msg == DISCONNECT_MSG:
             msg = TERMINATION_MSG
